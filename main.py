@@ -45,7 +45,7 @@ scaler = joblib.load(SCALER_PATH)
 def load_model():
     input_dim = 17
     model = ChurnModel(input_dim)
-    model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=torch))
     model.eval()
     return model
 
