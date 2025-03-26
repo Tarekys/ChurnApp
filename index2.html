@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload & Prediction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            background: linear-gradient(145deg, #ffffff, #d7d7d7);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3), 
+                        -10px -10px 20px rgba(255, 255, 255, 0.7);
+            width: 50%;
+            margin: auto;
+            transition: transform 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+        }
+        h2 {
+            color: #1e3c72;
+        }
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f1f1f1;
+            box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.2), 
+                        inset -3px -3px 6px rgba(255, 255, 255, 0.8);
+        }
+        button {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3), 
+                        -5px -5px 10px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: translateY(-3px);
+            box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.4), 
+                        -7px -7px 15px rgba(255, 255, 255, 0.6);
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2), 
+                        inset -5px -5px 10px rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Upload a File for Prediction</h2>
+        <input type="file" id="fileInput">
+        <br>
+        <button onclick="uploadFile()">Upload & Predict</button>
+
+        <h3>Prediction Result:</h3>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert("Please select a file!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            fetch("http://127.0.0.1:8000/predictions", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error: " + error;
+            });
+        }
+    </script>
+
+</body>
+</html>
