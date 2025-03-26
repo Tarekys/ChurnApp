@@ -42,7 +42,6 @@ SCALER_PATH = os.path.join(os.path.dirname(__file__), "models/scaler.pkl")
 
 scaler = joblib.load(SCALER_PATH)
 
-# دالة لتحميل النموذج عند تشغيل التطبيق
 def load_model():
     input_dim = 17
     model = ChurnModel(input_dim)
@@ -78,7 +77,7 @@ async def predict_from_csv(file: UploadFile = File(...)):
             predictions = model(X_new_tensor)
             predicted_labels = (predictions > 0.5).float()
 
-        # إضافة النتائج إلى DataFrame
+
         df['Churn Prediction'] = pd.Series(predicted_labels.numpy().astype(int).squeeze()).map({0: "Stay", 1: "Will Churn"})
         return df[['Churn Prediction']].to_dict()
 
